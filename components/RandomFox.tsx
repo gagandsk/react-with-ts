@@ -1,9 +1,13 @@
 import { useRef, useEffect, useState } from "react";
-type Props = { image: string };
+import { ImgHTMLAttributes } from "react";
 
-export function RandomFox({ image }: Props) {
+type LazyImageProps = { src: string };
+type ImageNative = ImgHTMLAttributes<HTMLImageElement>
+type Props = LazyImageProps & ImageNative;
+
+export function LazyImage({ src, ...imgProps }: Props) {
   const node = useRef<HTMLImageElement>(null);
-  const [src, setSrc] = useState(
+  const [currentSrc, setCurrentSrc] = useState(
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
   )
   
@@ -13,7 +17,7 @@ export function RandomFox({ image }: Props) {
       entries.forEach(entry => {
         //onIntersection -> console.log
         if(entry.isIntersecting) {
-          setSrc(image)
+          setCurrentSrc(src)
         }
       });
     });
@@ -27,15 +31,7 @@ export function RandomFox({ image }: Props) {
     return () => {
       observer.disconnect()
     }
-  }, [image])
+  }, [src])
   
-  return (
-    <img
-      ref={node}
-      width="320"
-      height="auto"
-      src={src}
-      className="rounded bg-gray-300"
-    />
-  );
+  return <img ref={node} src={currentSrc} {...imgProps} />;
 }
