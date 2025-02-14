@@ -4,9 +4,9 @@ import { MouseEventHandler } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { LazyImage } from "../../components/RandomFox";
+import { random } from "lodash";
 
-// random number from 1 to 122
-const random = () => Math.floor(Math.random() * 122) + 1;
+const myRandom = () => random(1, 123);
 
 //generate simple unique id
 const generateId = () => Math.random().toString(36).substr(2,9)
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
 
     const newImageItem: IFoxImageItem = {
       id: generateId(),
-      url: `https://randomfox.ca/images/${random()}.jpg`
+      url: `https://randomfox.ca/images/${myRandom()}.jpg`
     }
     setImages([ ...images, newImageItem ])
   }
